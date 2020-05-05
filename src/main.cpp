@@ -1,5 +1,6 @@
 // Example to demonstrate thread definition, semaphores, and thread sleep.
 #include "ChRt.h"
+#include "pb.h"
 
 // LED_BUILTIN pin on Arduino is usually pin 13.
 
