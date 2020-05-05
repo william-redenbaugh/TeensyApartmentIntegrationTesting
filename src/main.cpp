@@ -13,6 +13,7 @@ static THD_WORKING_AREA(waThread1, 64);
 
 static THD_FUNCTION(Thread1, arg) {
   (void)arg;
+  
   while (!chThdShouldTerminateX()) {
     // Wait for signal from thread 2.
     chSemWait(&sem);
