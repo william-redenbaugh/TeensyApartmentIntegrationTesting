@@ -8,7 +8,7 @@
 
 void protobuffer_testing(void);
 
-uint8_t proto_testing_buffer[128];
+uint8_t protobuffer[12500];
 // LED_BUILTIN pin on Arduino is usually pin 13.
 
 // Declare a semaphore with an inital counter value of zero.
@@ -50,21 +50,20 @@ void setup() {
 
 uint16_t buff_place = 0; 
 void loop() {
-  if(Serial.available() > 0){
-    proto_testing_buffer[buff_place] = Serial.read();
-    buff_place++; 
+  // Once we have 128 bytes in the array.
+  if(Serial.available() >= 12500){
 
-    // Reset when we get to 127
-    if(buff_place < 127){
-      buff_place = 0; 
-      // Unpacking the message. 
-      BoardStatus board_status; 
-      pb_istream_t stream_in  = pb_istream_from_buffer(proto_testing_buffer, sizeof(proto_testing_buffer));
-      pb_decode(&stream_in, BoardStatus_fields, &board_status);
+    // We read them into our buffer. 
+    Serial.readBytes(protobuffer, 12500);
 
-      Serial.print("Board Free Memory: ");
-      Serial.println(board_status.free_mem_kb);
-    }
+    // And then we unpack em!
+    BoardStatus board_status; 
+    pb_istream_t stream_in  = pb_istream_from_buffer(protobuffer, sizeof(protobuffer));
+    pb_decode(&stream_in, BoardStatus_fields, &board_status);
+
+    // And here we print out data for debugging. 
+    Serial.print("Board Free Memory: ");
+    Serial.println(board_status.free_mem_kb);
   }  
 }
 
