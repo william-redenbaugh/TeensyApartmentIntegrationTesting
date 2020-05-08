@@ -1,5 +1,9 @@
 #### ChRt - ChibiOS/RT Arduino Library
 
+NOTE** this is taken from grieman and his ChRt repo! check out his stuff here: https://github.com/greiman/ChRt
+
+I didn't work on any of this stuff, and I recomend if you wanna understand how the rtos works go talk to that guy
+
 This is a version of ChibiOS for Arduino.
 I am starting a new repository since this version is not backward
 compatible with the previous libraries. Both AVR and ARM are now in
