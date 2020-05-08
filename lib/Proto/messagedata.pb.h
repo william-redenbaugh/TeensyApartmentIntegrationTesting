@@ -3,7 +3,7 @@
 
 #ifndef PB_EMBEDDEDMESSAGES_MESSAGEDATA_PB_H_INCLUDED
 #define PB_EMBEDDEDMESSAGES_MESSAGEDATA_PB_H_INCLUDED
-#include <pb.h>
+#include "pb.h"
 
 #if PB_PROTO_HEADER_VERSION != 40
 #error Regenerate this file with the current version of nanopb generator.
@@ -16,7 +16,8 @@ extern "C" {
 /* Enum definitions */
 typedef enum _MessageData_MessageType {
     MessageData_MessageType_GENERAL_INSTRUCTIONS = 0,
-    MessageData_MessageType_MATRIX_DATA = 1
+    MessageData_MessageType_MATRIX_DATA = 1,
+    MessageData_MessageType_LED_STRIP_DATA = 2
 } MessageData_MessageType;
 
 /* Struct definitions */
@@ -28,8 +29,8 @@ typedef struct _MessageData {
 
 /* Helper constants for enums */
 #define _MessageData_MessageType_MIN MessageData_MessageType_GENERAL_INSTRUCTIONS
-#define _MessageData_MessageType_MAX MessageData_MessageType_MATRIX_DATA
-#define _MessageData_MessageType_ARRAYSIZE ((MessageData_MessageType)(MessageData_MessageType_MATRIX_DATA+1))
+#define _MessageData_MessageType_MAX MessageData_MessageType_LED_STRIP_DATA
+#define _MessageData_MessageType_ARRAYSIZE ((MessageData_MessageType)(MessageData_MessageType_LED_STRIP_DATA+1))
 
 
 /* Initializer values for message structs */
