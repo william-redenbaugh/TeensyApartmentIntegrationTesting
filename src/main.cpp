@@ -4,8 +4,17 @@
 #include "StripManagement.hpp"
 #include "MatrixManagement.hpp"
 
+// Message management handler, lets us deal with messaging stuff in another thread. 
 MessageManagement message_management; 
+
+// Strip management, where we will deal with strip animations and pushing data to the pixels. 
 StripManagement strip_management; 
+
+// Same thing as strip management except for it's for a led matrix instead. 
+MatrixManagement matrix_management; 
+
+systime_t message_thread_begin_tick; 
+systime_t message_thread_end_tick;
 
 // Static function for working on our strip thread. 
 static THD_WORKING_AREA(strip_thread_working_area, 2048);
@@ -40,6 +49,8 @@ static THD_FUNCTION(matrix_thread, arg){
   while(1){
     thread_begin_tick = chVTGetSystemTimeX();
 
+    matrix_management.begin();
+
     thread_end_tick = thread_begin_tick + TIME_I2MS(10);
     if(thread_end_tick > chVTGetSystemTimeX())
           chThdSleepUntil(thread_end_tick);   
@@ -48,6 +59,8 @@ static THD_FUNCTION(matrix_thread, arg){
 
 void chSetup() {
   message_management.begin();
+  strip_management.begin();
+  matrix_management.begin();
   // Creates a thread for pushing data to the led strips(via dma)
   chThdCreateStatic(strip_thread_working_area, 
                     sizeof(strip_thread_working_area), 
@@ -70,8 +83,13 @@ void setup() {
 }
 
 void loop() {
+  message_thread_begin_tick = chVTGetSystemTimeX();
   // Running our message management on the main loop thread. 
   message_management.run();
   // Wait about 5 milliseconds between processing requests
-  chThdSleepMilliseconds(7);
+
+  // So we have the whole system run every 7 milliseconds. 
+  message_thread_end_tick = message_thread_begin_tick + TIME_I2MS(7);
+  if(message_thread_end_tick > chVTGetSystemTimeX())
+    chThdSleepUntil(message_thread_end_tick);
 }
