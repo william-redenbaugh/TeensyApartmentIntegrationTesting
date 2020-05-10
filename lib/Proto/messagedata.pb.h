@@ -17,7 +17,8 @@ extern "C" {
 typedef enum _MessageData_MessageType {
     MessageData_MessageType_GENERAL_INSTRUCTIONS = 0,
     MessageData_MessageType_MATRIX_DATA = 1,
-    MessageData_MessageType_LED_STRIP_DATA = 2
+    MessageData_MessageType_LED_STRIP_DATA = 2,
+    MessageData_MessageType_HEAAT_CONTROL_DATA = 3
 } MessageData_MessageType;
 
 /* Struct definitions */
@@ -29,8 +30,8 @@ typedef struct _MessageData {
 
 /* Helper constants for enums */
 #define _MessageData_MessageType_MIN MessageData_MessageType_GENERAL_INSTRUCTIONS
-#define _MessageData_MessageType_MAX MessageData_MessageType_LED_STRIP_DATA
-#define _MessageData_MessageType_ARRAYSIZE ((MessageData_MessageType)(MessageData_MessageType_LED_STRIP_DATA+1))
+#define _MessageData_MessageType_MAX MessageData_MessageType_HEAAT_CONTROL_DATA
+#define _MessageData_MessageType_ARRAYSIZE ((MessageData_MessageType)(MessageData_MessageType_HEAAT_CONTROL_DATA+1))
 
 
 /* Initializer values for message structs */

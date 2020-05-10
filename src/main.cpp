@@ -49,7 +49,7 @@ static THD_FUNCTION(matrix_thread, arg){
   while(1){
     thread_begin_tick = chVTGetSystemTimeX();
 
-    matrix_management.begin();
+    matrix_management.begin();    
 
     thread_end_tick = thread_begin_tick + TIME_I2MS(10);
     if(thread_end_tick > chVTGetSystemTimeX())
