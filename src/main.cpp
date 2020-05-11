@@ -3,6 +3,7 @@
 #include "MessageManagement.hpp"
 #include "StripManagement.hpp"
 #include "MatrixManagement.hpp"
+#include "TsyDMASPI.h"
 
 // Message management handler, lets us deal with messaging stuff in another thread. 
 MessageManagement message_management; 
