@@ -3,7 +3,9 @@
 #include "MessageManagement.hpp"
 #include "StripManagement.hpp"
 #include "MatrixManagement.hpp"
-#include "TsyDMASPI.h"
+//#include "TsyDMASPI.h"
+#include "Adafruit_NeoPixel.h"
+#include <SPI.h>
 
 // Message management handler, lets us deal with messaging stuff in another thread. 
 MessageManagement message_management; 
@@ -23,6 +25,7 @@ static THD_FUNCTION(strip_thread, arg){
     (void)arg;
     // Gotta call that begin command for our strip management!
     strip_management.begin();
+    
     systime_t thread_begin_tick;
     systime_t thread_end_tick;
     while(1){

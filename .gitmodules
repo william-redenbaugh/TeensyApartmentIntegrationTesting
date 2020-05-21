@@ -1,0 +1,9 @@
+[submodule "lib/ChRt"]
+	path = lib/ChRt
+	url = git@github.com:william-redenbaugh/ChRt.git
+[submodule "lib/FastLED"]
+	path = lib/FastLED
+	url = git@github.com:FastLED/FastLED.git
+[submodule "lib/Adafruit_NeoPixel"]
+	path = lib/Adafruit_NeoPixel
+	url = git@github.com:adafruit/Adafruit_NeoPixel.git

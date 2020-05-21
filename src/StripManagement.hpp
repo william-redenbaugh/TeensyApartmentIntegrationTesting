@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 #include "ChRt.h"
-
+#include <SPI.h>
 
 class StripManagement{
     public: 
