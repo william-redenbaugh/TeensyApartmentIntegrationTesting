@@ -19,16 +19,36 @@ MatrixManagement matrix_management;
 systime_t message_thread_begin_tick; 
 systime_t message_thread_end_tick;
 
+#define PIN        11
+#define NUMPIXELS 1
+Adafruit_NeoPixel status_led(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+
+static THD_WORKING_AREA(status_led_thread_wa, 128);
+static THD_FUNCTION(status_led_thread, arg){
+  (void)arg; 
+  while(1){
+    status_led.setPixelColor(0, status_led.Color(0, 150, 0));
+    status_led.show();
+    
+    chThdSleepSeconds(1);
+    
+    status_led.setPixelColor(0, status_led.Color(0, 0, 0));
+    status_led.show();
+    
+    chThdSleepSeconds(1);
+  }
+}
+
 // Static function for working on our strip thread. 
 static THD_WORKING_AREA(strip_thread_working_area, 2048);
 static THD_FUNCTION(strip_thread, arg){
     (void)arg;
     // Gotta call that begin command for our strip management!
     strip_management.begin();
-    
     systime_t thread_begin_tick;
     systime_t thread_end_tick;
     while(1){
+        /*
         thread_begin_tick = chVTGetSystemTimeX();
         // Just running strip stuff here!
         strip_management.run();
@@ -40,7 +60,11 @@ static THD_FUNCTION(strip_thread, arg){
         // 10 ms we can put that shit here. 
         thread_end_tick = thread_begin_tick + TIME_I2MS(10);
         if(thread_end_tick > chVTGetSystemTimeX())
-          chThdSleepUntil(thread_end_tick);      
+          chThdSleepUntil(thread_end_tick);  
+
+          */
+
+
     }
 }
 
@@ -80,6 +104,9 @@ void chSetup() {
 }
 
 void setup() {
+  // First thing we enable is our status LED!
+  status_led.begin();
+  
   // We do all of our setup in here. 
   chBegin(chSetup);
   // chBegin() resets stacks and should never return.
