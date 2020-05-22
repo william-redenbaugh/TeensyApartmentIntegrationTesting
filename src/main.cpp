@@ -49,7 +49,6 @@ static THD_FUNCTION(strip_thread, arg){
     systime_t thread_begin_tick;
     systime_t thread_end_tick;
     while(1){
-        /*
         thread_begin_tick = chVTGetSystemTimeX();
         // Just running strip stuff here!
         strip_management.run();
@@ -62,10 +61,6 @@ static THD_FUNCTION(strip_thread, arg){
         thread_end_tick = thread_begin_tick + TIME_I2MS(10);
         if(thread_end_tick > chVTGetSystemTimeX())
           chThdSleepUntil(thread_end_tick);  
-
-          */
-
-
     }
 }
 
