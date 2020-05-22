@@ -18,7 +18,6 @@ class StripManagement{
         
         void run(void);
     private: 
-
 };
 
 #endif

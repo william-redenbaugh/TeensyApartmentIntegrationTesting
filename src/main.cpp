@@ -22,11 +22,12 @@ systime_t message_thread_end_tick;
 #define PIN       11
 #define NUMPIXELS  1
 Adafruit_NeoPixel status_led(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+DMASPIStrip neo_status; 
 
 static THD_WORKING_AREA(status_led_thread_wa, 512);
 static THD_FUNCTION(status_led_thread, arg){
   (void)arg; 
-
+  neo_status.begin();
   while(1){
     status_led.setPixelColor(0, status_led.Color(0, 0, 100));
     status_led.show();
@@ -108,8 +109,6 @@ void chSetup() {
 }
 
 void setup() {
-  // First thing we enable is our status LED!
-  
   // We do all of our setup in here. 
   chBegin(chSetup);
   // chBegin() resets stacks and should never return.
