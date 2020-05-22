@@ -1,11 +1,16 @@
 // ChibiOS files.
 #include "ChRt.h"
+
+// Teensy SPI interface library
+#include <SPI.h>
+
+// Adafruit's LED strip library
+#include "OctoWS2811.h"
+
+// Our Files
 #include "MessageManagement.hpp"
 #include "StripManagement.hpp"
 #include "MatrixManagement.hpp"
-//#include "TsyDMASPI.h"
-#include "Adafruit_NeoPixel.h"
-#include <SPI.h>
 
 // Message management handler, lets us deal with messaging stuff in another thread. 
 MessageManagement message_management; 
@@ -19,23 +24,30 @@ MatrixManagement matrix_management;
 systime_t message_thread_begin_tick; 
 systime_t message_thread_end_tick;
 
-#define PIN       11
-#define NUMPIXELS  1
-Adafruit_NeoPixel status_led(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+
+const int num_pins = 1; 
+const int leds_per_strip = 1; 
+uint8_t pin_list[1] = {11};
+DMAMEM int display_memory[(leds_per_strip * num_pins * 3)/4];
+int drawing_memory[leds_per_strip * num_pins * 3 / 4];
+const int config = WS2811_GRB | WS2811_800kHz;
+
+OctoWS2811 status_led(leds_per_strip, drawing_memory, config, pin_list);
+
+#define BLUE   0x0000FF
+#define GREEN  0x001600
+#define BLACK 0x000000
 
 static THD_WORKING_AREA(status_led_thread_wa, 512);
 static THD_FUNCTION(status_led_thread, arg){
   (void)arg; 
-
+  status_led.begin();
+  status_led.show();
+  
   while(1){
-    status_led.setPixelColor(0, status_led.Color(0, 0, 100));
-    status_led.show();
-    
+    status_led.setPixel(0, GREEN);
     chThdSleepSeconds(1);
-    
-    status_led.setPixelColor(0, status_led.Color(0, 0, 0));
-    status_led.show();
-    
+    status_led.setPixel(0, BLACK);
     chThdSleepSeconds(1);
   }
 }
@@ -85,7 +97,6 @@ void chSetup() {
   message_management.begin();
   strip_management.begin();
   matrix_management.begin();
-  status_led.begin();
   
   chThdCreateStatic(status_led_thread_wa, 
                     sizeof(status_led_thread_wa), 
