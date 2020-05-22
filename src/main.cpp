@@ -19,15 +19,16 @@ MatrixManagement matrix_management;
 systime_t message_thread_begin_tick; 
 systime_t message_thread_end_tick;
 
-#define PIN        11
-#define NUMPIXELS 1
+#define PIN       11
+#define NUMPIXELS  1
 Adafruit_NeoPixel status_led(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
 
-static THD_WORKING_AREA(status_led_thread_wa, 128);
+static THD_WORKING_AREA(status_led_thread_wa, 512);
 static THD_FUNCTION(status_led_thread, arg){
   (void)arg; 
+
   while(1){
-    status_led.setPixelColor(0, status_led.Color(0, 150, 0));
+    status_led.setPixelColor(0, status_led.Color(0, 0, 100));
     status_led.show();
     
     chThdSleepSeconds(1);
@@ -89,6 +90,14 @@ void chSetup() {
   message_management.begin();
   strip_management.begin();
   matrix_management.begin();
+  status_led.begin();
+  
+  chThdCreateStatic(status_led_thread_wa, 
+                    sizeof(status_led_thread_wa), 
+                    NORMALPRIO + 3, 
+                    status_led_thread, 
+                    NULL);
+
   // Creates a thread for pushing data to the led strips(via dma)
   chThdCreateStatic(strip_thread_working_area, 
                     sizeof(strip_thread_working_area), 
@@ -105,7 +114,6 @@ void chSetup() {
 
 void setup() {
   // First thing we enable is our status LED!
-  status_led.begin();
   
   // We do all of our setup in here. 
   chBegin(chSetup);
