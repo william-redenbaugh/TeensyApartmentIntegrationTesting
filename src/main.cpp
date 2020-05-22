@@ -2,8 +2,8 @@
 #include "ChRt.h"
 #include "MessageManagement.hpp"
 #include "StripManagement.hpp"
+
 #include "MatrixManagement.hpp"
-//#include "TsyDMASPI.h"
 #include "Adafruit_NeoPixel.h"
 #include <SPI.h>
 

@@ -5,6 +5,13 @@
 #include "ChRt.h"
 #include <SPI.h>
 
+class DMASPIStrip{
+    public: 
+        void begin(void);
+    private: 
+        
+};
+
 class StripManagement{
     public: 
         void begin(void);
