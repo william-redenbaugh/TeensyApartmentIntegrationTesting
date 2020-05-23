@@ -4,7 +4,6 @@
 #include "StripManagement.hpp"
 
 #include "MatrixManagement.hpp"
-#include "Adafruit_NeoPixel.h"
 #include <SPI.h>
 
 // Message management handler, lets us deal with messaging stuff in another thread. 
@@ -19,23 +18,22 @@ MatrixManagement matrix_management;
 systime_t message_thread_begin_tick; 
 systime_t message_thread_end_tick;
 
-#define PIN       11
-#define NUMPIXELS  1
-Adafruit_NeoPixel status_led(NUMPIXELS, PIN, NEO_GRB + NEO_KHZ800);
+uint8_t dma_out_arr[150];
+uint8_t dma_in_arr[150];
 DMASPIStrip neo_status; 
 
 static THD_WORKING_AREA(status_led_thread_wa, 512);
 static THD_FUNCTION(status_led_thread, arg){
   (void)arg; 
-  neo_status.begin();
-  while(1){
-    status_led.setPixelColor(0, status_led.Color(0, 0, 100));
-    status_led.show();
-    
+  bool begin = neo_status.begin(dma_in_arr, dma_out_arr, &SPI, 3);
+  while(begin){
+
+    neo_status.set_led(0, 100, 0, 0);
+    neo_status.update();
     chThdSleepSeconds(1);
-    
-    status_led.setPixelColor(0, status_led.Color(0, 0, 0));
-    status_led.show();
+
+    neo_status.set_led(0, 0, 0, 0);
+    neo_status.update();
     
     chThdSleepSeconds(1);
   }
@@ -86,7 +84,6 @@ void chSetup() {
   message_management.begin();
   strip_management.begin();
   matrix_management.begin();
-  status_led.begin();
   
   chThdCreateStatic(status_led_thread_wa, 
                     sizeof(status_led_thread_wa), 
