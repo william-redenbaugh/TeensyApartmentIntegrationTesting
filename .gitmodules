@@ -7,3 +7,6 @@
 [submodule "lib/Adafruit_NeoPixel"]
 	path = lib/Adafruit_NeoPixel
 	url = git@github.com:adafruit/Adafruit_NeoPixel.git
+[submodule "lib/OctoWS2811"]
+	path = lib/OctoWS2811
+	url = git@github.com:william-redenbaugh/OctoWS2811.git

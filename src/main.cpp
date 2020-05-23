@@ -5,6 +5,10 @@
 
 #include "MatrixManagement.hpp"
 #include <SPI.h>
+#include "OctoWS2811.h"
+
+// Application Level programs
+#include "status_led_thread.h"
 
 // Message management handler, lets us deal with messaging stuff in another thread. 
 MessageManagement message_management; 
@@ -18,33 +22,13 @@ MatrixManagement matrix_management;
 systime_t message_thread_begin_tick; 
 systime_t message_thread_end_tick;
 
-uint8_t dma_out_arr[150];
-uint8_t dma_in_arr[150];
-DMASPIStrip neo_status; 
-
-static THD_WORKING_AREA(status_led_thread_wa, 512);
-static THD_FUNCTION(status_led_thread, arg){
-  (void)arg; 
-  bool begin = neo_status.begin(dma_in_arr, dma_out_arr, &SPI, 3);
-  while(begin){
-
-    neo_status.set_led(0, 100, 0, 0);
-    neo_status.update();
-    chThdSleepSeconds(1);
-
-    neo_status.set_led(0, 0, 0, 0);
-    neo_status.update();
-    
-    chThdSleepSeconds(1);
-  }
-}
-
 // Static function for working on our strip thread. 
 static THD_WORKING_AREA(strip_thread_working_area, 2048);
 static THD_FUNCTION(strip_thread, arg){
     (void)arg;
     // Gotta call that begin command for our strip management!
     strip_management.begin();
+    
     systime_t thread_begin_tick;
     systime_t thread_end_tick;
     while(1){
@@ -84,13 +68,9 @@ void chSetup() {
   message_management.begin();
   strip_management.begin();
   matrix_management.begin();
-  
-  chThdCreateStatic(status_led_thread_wa, 
-                    sizeof(status_led_thread_wa), 
-                    NORMALPRIO + 3, 
-                    status_led_thread, 
-                    NULL);
 
+  start_status_led_thread();
+  
   // Creates a thread for pushing data to the led strips(via dma)
   chThdCreateStatic(strip_thread_working_area, 
                     sizeof(strip_thread_working_area), 

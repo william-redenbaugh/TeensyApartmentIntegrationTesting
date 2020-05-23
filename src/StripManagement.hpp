@@ -9,18 +9,28 @@
 #define BYTES_FOR_LED_BYTE 4
 #define BYTES_FOR_LED BYTES_FOR_LED_BYTE*NB_COLORS
 
-class DMASPIStrip{
+class StatusLED{
     public: 
-        bool begin(uint8_t *in_arr, uint8_t *out_arr, SPIClass *spi, uint16_t num_leds);
-        void set_led(uint16_t led, uint8_t r, uint8_t g, uint8_t b); 
-        void update(void);
+        // Command to begin strip remotely. 
+        void begin(void);
+        void _begin_led(void);
 
+        void set_led(uint8_t r, uint8_t g, uint8_t b); 
+        void update(void);
+        void set_start(void);
+        void rtos_enabled(void);
+
+        void red(void);
+        void green(void);
+        void blue(void);
+        void white(void);
+        void black(void);
+        
     private: 
-        SPIClass *spi; 
-        uint16_t num_leds = 0; 
-        uint8_t *dma_out_arr;
-        uint8_t *dma_rec;
+        uint8_t dma_out_arr[20];
+        uint8_t dma_rec[20];
         EventResponder event_responder; 
+        thread_t *status_thread; 
 };
 
 class StripManagement{
