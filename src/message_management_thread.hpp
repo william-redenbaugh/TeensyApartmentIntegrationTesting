@@ -6,6 +6,6 @@
 #include "MessageManagement.hpp"
 
 extern void start_message_management(void);
-void loop();
+extern void loop(void);
 
 #endif 

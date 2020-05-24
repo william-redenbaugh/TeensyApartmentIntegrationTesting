@@ -7,7 +7,7 @@ systime_t message_thread_begin_tick;
 systime_t message_thread_end_tick;
 
 extern void start_message_management(void);
-void loop();
+extern void loop(void);
 
 extern void start_message_management(void){
     message_management.begin();
