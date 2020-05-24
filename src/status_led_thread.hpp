@@ -1,5 +1,5 @@
-#ifndef _STATUS_LED_THREAD_H
-#define _STATUS_LED_THREAD_H
+#ifndef _STATUS_LED_THREAD_HPP
+#define _STATUS_LED_THREAD_HPP
 
 #include "Arduino.h"
 #include "ChRt.h"
@@ -13,6 +13,7 @@ enum status_led_col{
   RGB_COL_BLACK
 };
 
-void start_status_led_thread(void);
+extern void start_status_led_thread(void);
+extern void choose_col(status_led_col colour);
 
 #endif 
