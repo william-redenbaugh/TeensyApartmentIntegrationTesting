@@ -22,6 +22,11 @@ static THD_FUNCTION(matrix_thread, arg){
   }
 }
 
+/**************************************************************************/
+/*!
+    @brief Allows us to start up our matrix animation thread. 
+*/
+/**************************************************************************/
 extern void start_matrix_thread(void){
     chThdCreateStatic(matrix_thread_working_area, 
                       sizeof(matrix_thread_working_area), 

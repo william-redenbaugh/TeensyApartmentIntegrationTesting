@@ -1,15 +1,21 @@
 #include "MessageManagement.hpp"
 
-void MessageManagement::begin(void){
-    // Set up Built in LED and set it high!
-    pinMode(LED_BUILTIN, OUTPUT);
-    digitalWrite(LED_BUILTIN, HIGH);
-    
+/**************************************************************************/
+/*!
+    @brief Starts up our serial interface for doing message management stuff 
+*/
+/**************************************************************************/
+void MessageManagement::begin(void){    
     // Doesn't really matter what we put in here
     // It's always running at 12 megabits anyway!
     Serial.begin(115200);
 }
 
+/**************************************************************************/
+/*!
+    @brief Serial message unpacker the message management class. Will then connect data to other message unpacking functions. 
+*/
+/**************************************************************************/
 void MessageManagement::run(void){
 
     if(Serial.available() >= 16){
@@ -51,6 +57,11 @@ void MessageManagement::run(void){
     }
 }
 
+/**************************************************************************/
+/*!
+    @brief Unpacks message general instruction enumerated types. 
+*/
+/**************************************************************************/
 void MessageManagement::process_general_instructions(void){
     // Array with latest package information. 
     uint8_t general_instr_buff[this->latest_message_data.message_size];
@@ -81,10 +92,20 @@ void MessageManagement::process_general_instructions(void){
     }
 }
 
+/**************************************************************************/
+/*!
+    @brief Unpacks matrix information, and get's system ready to send out information to matrix. 
+*/
+/**************************************************************************/
 void MessageManagement::processing_matrix_information(void){
 
 }
 
+/**************************************************************************/
+/*!
+    @brief Unpacks LED matrix information. 
+*/
+/**************************************************************************/
 void MessageManagement::processing_led_strip_information(void){
 
 }

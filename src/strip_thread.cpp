@@ -30,6 +30,11 @@ static THD_FUNCTION(strip_thread, arg){
     }
 }
 
+/**************************************************************************/
+/*!
+    @brief Allows us to start up our strip thread. 
+*/
+/**************************************************************************/
 extern void start_strip_thread(void){
     // Creates a thread for pushing data to the led strips(via dma)
     chThdCreateStatic(strip_thread_working_area, 

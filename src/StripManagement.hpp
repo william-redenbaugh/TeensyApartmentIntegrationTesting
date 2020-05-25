@@ -9,6 +9,11 @@
 #define BYTES_FOR_LED_BYTE 4
 #define BYTES_FOR_LED BYTES_FOR_LED_BYTE*NB_COLORS
 
+/**************************************************************************/
+/*!
+    @brief Class that allows us to have a status LED. 
+*/
+/**************************************************************************/
 class StatusLED{
     public: 
         // Command to begin strip remotely. 
@@ -32,6 +37,12 @@ class StatusLED{
         EventResponder event_responder; 
         thread_t *status_thread; 
 };
+
+/**************************************************************************/
+/*!
+    @brief Class that will aid us in managing the strips attached to our teensy. 
+*/
+/**************************************************************************/
 
 class StripManagement{
     public: 

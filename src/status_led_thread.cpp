@@ -5,20 +5,42 @@ StatusLED status_led;
 
 // Thread handler for status LED. 
 thread_t *status_thread; 
-// Status led enumerated type. 
-status_led_col col; 
 
-extern void choose_col(status_led_col colour);
+// The color that we flash once
+status_led_col flash_col; 
+
+// Color that is currently blinking. 
+volatile status_led_col current_blink_col = RGB_COL_BLUE;
+
+extern void status_signal_once(status_led_col colour);
+extern void status_change_flash(status_led_col colour);
 void set_col(status_led_col colour);
 extern void start_status_led_thread(void);
 
-// External function that we use to set next color of
-// Status LED from outside functions. 
-extern void choose_col(status_led_col colour){
-  col = colour;
+/**************************************************************************/
+/*!
+    @brief External function that let's us choose an enumerated color type. This non-blocking command tell's the status LED to signal a different color. 
+*/
+/**************************************************************************/
+extern void status_signal_once(status_led_col colour){
+  flash_col = colour;
   chEvtSignal(status_thread, EVENT_MASK(0));
 }
 
+/**************************************************************************/
+/*!
+    @brief Change the color the the Status LED is always flashing. 
+*/
+/**************************************************************************/
+extern void status_change_flash(status_led_col colour){
+  current_blink_col = colour;
+}
+
+/**************************************************************************/
+/*!
+    @brief Helper function that let's us set the different colors based off the available enumerations. 
+*/
+/**************************************************************************/
 void set_col(status_led_col colour){
   // Which color are we setting next. 
   switch(colour){
@@ -59,19 +81,24 @@ static THD_FUNCTION(status_led_thread, arg){
     // Choose fade events. 
     m = chEvtWaitAnyTimeout(ALL_EVENTS, 1000);
     if(m & EVENT_MASK(0))
-      set_col(col); 
+      set_col(flash_col); 
     else
       status_led.black();
     
     // Choose fade events. 
     m = chEvtWaitAnyTimeout(ALL_EVENTS, 1000);
     if(m & EVENT_MASK(0))
-      set_col(col);
+      set_col(flash_col);
     else
-      status_led.blue();
+      set_col(current_blink_col);
   }
 }
 
+/**************************************************************************/
+/*!
+    @brief Allows us to start up our status LED thread. 
+*/
+/**************************************************************************/
 extern void start_status_led_thread(void){
     // Enable our status LED thread, last so we know all other threads have
     // been enabled. 
