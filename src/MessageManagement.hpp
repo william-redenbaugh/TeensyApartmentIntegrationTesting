@@ -23,6 +23,9 @@ public:
     
     // Holds the latest message data. 
     MessageData_MessageType latest_message_enum(void);
+
+    // Returns the latest General instruction data. 
+    GeneralInstructions_MainInstrEnum get_latest_general_instructions(void);
     
     // Test code for making sure that the protobuffers are
     // packing and unpacking properly
@@ -44,6 +47,8 @@ private:
     // latest message data
     MessageData latest_message_data; 
 
+    // latest general instruction data. 
+    GeneralInstructions general_instructions; 
 };
 
 #endif 

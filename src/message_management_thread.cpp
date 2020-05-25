@@ -1,5 +1,6 @@
 #include "message_management_thread.hpp"
 #include "status_led_thread.hpp"
+#include "status_led_thread.hpp"
 
 // Message management handler, lets us deal with messaging stuff in another thread. 
 MessageManagement message_management; 
@@ -9,6 +10,8 @@ systime_t message_thread_end_tick;
 
 extern void start_message_management(void);
 extern void loop(void);
+
+void run_general_instructions(void);
 
 /**************************************************************************/
 /*!
@@ -31,8 +34,8 @@ extern void loop(void) {
   if(message_management.run()){
         switch (message_management.latest_message_enum()){
         case (MessageData_MessageType_GENERAL_INSTRUCTIONS):
+        run_general_instructions();
         break;
-
         case (MessageData_MessageType_MATRIX_DATA):
         break;
 
@@ -48,5 +51,30 @@ extern void loop(void) {
   message_thread_end_tick = message_thread_begin_tick + TIME_I2MS(7);
   if(message_thread_end_tick > chVTGetSystemTimeX())
     chThdSleepUntil(message_thread_end_tick);
+}
+
+/**************************************************************************/
+/*!
+    @brief Whenever we get new general instruction data, it should sit here. 
+*/
+/**************************************************************************/
+void run_general_instructions(void){
+    switch(message_management.get_latest_general_instructions()){
+    case(GeneralInstructions_MainInstrEnum_DO_NOTHING):
+    break;
+
+    case(GeneralInstructions_MainInstrEnum_REBOOT):
+    break;
+
+    case(GeneralInstructions_MainInstrEnum_FREE_MEM):
+    break;
+
+    case(GeneralInstructions_MainInstrEnum_FLASH_LED):
+    
+    break;
+
+    default:
+    break;
+    }
 }
 

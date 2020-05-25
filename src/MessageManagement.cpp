@@ -56,28 +56,19 @@ void MessageManagement::process_general_instructions(void){
     // Get latest data off serial device. 
     for(uint8_t i = 0; i < this->latest_message_data.message_size; i++)
         general_instr_buff[i] = Serial.read();
-
-    // Unpack the data!
-    GeneralInstructions general_instructions; 
+ 
     pb_istream_t msg_in = pb_istream_from_buffer(general_instr_buff, this->latest_message_data.message_size);
-    pb_decode(&msg_in, GeneralInstructions_fields, &general_instructions);
+    pb_decode(&msg_in, GeneralInstructions_fields, &this->general_instructions);
+}
 
-    switch(general_instructions.main_instructions){
-        case(GeneralInstructions_MainInstrEnum_REBOOT):
-        // NOT POSSIBLE ON TEENSY BOARDS.
-        break;
-        case(GeneralInstructions_MainInstrEnum_FLASH_LED):
-            digitalWrite(LED_BUILTIN, builtin_led_state);
-            builtin_led_state = !builtin_led_state;
-        break;
+/**************************************************************************/
+/*!
+    @returns The latest general instruction data, should be called right after we know we got new general instruction data.  
+*/
+/**************************************************************************/
 
-        case(GeneralInstructions_MainInstrEnum_FREE_MEM):
-            // TODO
-        break;
-
-        default:
-        break;   
-    }
+GeneralInstructions_MainInstrEnum MessageManagement::get_latest_general_instructions(void){
+    return this->general_instructions.main_instructions;
 }
 
 /**************************************************************************/
