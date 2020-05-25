@@ -25,26 +25,28 @@ extern void start_message_management(void){
 */
 /**************************************************************************/
 extern void loop(void) {
-/*
+
   message_thread_begin_tick = chVTGetSystemTimeX();
   // Running our message management on the main loop thread. 
-  message_management.run();
-  // Wait about 5 milliseconds between processing requests
+  if(message_management.run()){
+        switch (message_management.latest_message_enum()){
+        case (MessageData_MessageType_GENERAL_INSTRUCTIONS):
+        break;
 
+        case (MessageData_MessageType_MATRIX_DATA):
+        break;
+
+        case (MessageData_MessageType_LED_STRIP_DATA):
+        break;
+      
+        default:
+        break;
+      }
+  }
+  
   // So we have the whole system run every 7 milliseconds. 
   message_thread_end_tick = message_thread_begin_tick + TIME_I2MS(7);
   if(message_thread_end_tick > chVTGetSystemTimeX())
     chThdSleepUntil(message_thread_end_tick);
-
-*/
-
-    chThdSleepSeconds(2);
-    status_change_flash(RGB_COL_GREEN);
-    chThdSleepSeconds(2);
-    status_change_flash(RGB_COL_BLUE);
-    chThdSleepSeconds(2);
-    status_change_flash(RGB_COL_WHITE);
-    chThdSleepSeconds(2);
-    status_change_flash(RGB_COL_RED);
 }
 

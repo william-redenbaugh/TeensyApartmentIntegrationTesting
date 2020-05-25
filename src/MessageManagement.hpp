@@ -19,7 +19,10 @@ public:
     
     // function to run for message management, should be running in void loop command
     // since that function has the most free stack space. 
-    void run(void);
+    bool run(void);
+    
+    // Holds the latest message data. 
+    MessageData_MessageType latest_message_enum(void);
     
     // Test code for making sure that the protobuffers are
     // packing and unpacking properly

@@ -16,12 +16,11 @@ void MessageManagement::begin(void){
     @brief Serial message unpacker the message management class. Will then connect data to other message unpacking functions. 
 */
 /**************************************************************************/
-void MessageManagement::run(void){
+bool MessageManagement::run(void){
 
     if(Serial.available() >= 16){
         // Scoping the serial read and decoding so that it gets 
         // popped off the stack asap. 
-        {
             uint8_t message_instr_arr[16];
             // Popping off the oldest 16 bytes of information
             // for the message instruction data. 
@@ -31,30 +30,19 @@ void MessageManagement::run(void){
             // Message unpacking instructions. 
             pb_istream_t msg_in = pb_istream_from_buffer(message_instr_arr, 16);
             pb_decode(&msg_in, MessageData_fields, &this->latest_message_data);
-        }
 
-        switch (this->latest_message_data.message_type){
-        case (MessageData_MessageType_GENERAL_INSTRUCTIONS):
-            // Process general instructions function
-            this->process_general_instructions();
-            break;
-        
-        case(MessageData_MessageType_MATRIX_DATA):
-            this->processing_matrix_information();
-            break;
-        
-        case(MessageData_MessageType_LED_STRIP_DATA):
-            this->processing_led_strip_information();
-            break;
-
-        // if we get here. then we fucked up lol. 
-        default:
-        // Reads through whatever is left and clears the buffer. 
-        while(Serial.available())
-            Serial.read();
-        break;
-        }
+        return true;
     }
+}
+
+/**************************************************************************/
+/*!
+    @brief Serial message unpacker the message management class. Will then connect data to other message unpacking functions. 
+    @returns MessageData information
+*/
+/**************************************************************************/
+MessageData_MessageType MessageManagement::latest_message_enum(void){
+    return this->latest_message_data.message_type;
 }
 
 /**************************************************************************/
@@ -109,6 +97,13 @@ void MessageManagement::processing_matrix_information(void){
 void MessageManagement::processing_led_strip_information(void){
 
 }
+
+/**************************************************************************/
+/*!
+    @brief Tests to make sure that protbuffer serialization and deserialization is working properly. 
+    @returns boolean value that test was successful.  
+*/
+/**************************************************************************/
 
 bool MessageManagement::testing_message_protobuffers(void){
     MessageData message_data_out;
