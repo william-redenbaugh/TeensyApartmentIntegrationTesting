@@ -59,6 +59,7 @@ extern void loop(void) {
 */
 /**************************************************************************/
 void run_general_instructions(void){
+    
     switch(message_management.get_latest_general_instructions()){
     case(GeneralInstructions_MainInstrEnum_DO_NOTHING):
     break;
@@ -70,7 +71,14 @@ void run_general_instructions(void){
     break;
 
     case(GeneralInstructions_MainInstrEnum_FLASH_LED):
-    
+    break;
+
+    case(GeneralInstructions_MainInstrEnum_FLASH_GREEN):
+    status_change_flash(RGB_COL_GREEN);
+    break;
+
+    case(GeneralInstructions_MainInstrEnum_FLASH_BLUE):
+    status_change_flash(RGB_COL_BLUE);
     break;
 
     default:

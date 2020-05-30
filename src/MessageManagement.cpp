@@ -47,6 +47,24 @@ MessageData_MessageType MessageManagement::latest_message_enum(void){
 
 /**************************************************************************/
 /*!
+    @returns the latest boolean value of the return message. 
+*/
+/**************************************************************************/
+bool MessageManagement::latest_return_message(void){
+    return this->latest_message_data.return_message;
+}
+
+/**************************************************************************/
+/*!
+    @returns the latest size value of the return message. 
+*/
+/**************************************************************************/
+int32_t MessageManagement::return_message_size(void){
+    return this->latest_message_data.message_size;
+}
+
+/**************************************************************************/
+/*!
     @brief Unpacks message general instruction enumerated types. 
 */
 /**************************************************************************/
@@ -66,8 +84,8 @@ void MessageManagement::process_general_instructions(void){
     @returns The latest general instruction data, should be called right after we know we got new general instruction data.  
 */
 /**************************************************************************/
-
 GeneralInstructions_MainInstrEnum MessageManagement::get_latest_general_instructions(void){
+    this->process_general_instructions();
     return this->general_instructions.main_instructions;
 }
 

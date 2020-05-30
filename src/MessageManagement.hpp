@@ -24,9 +24,15 @@ public:
     // Holds the latest message data. 
     MessageData_MessageType latest_message_enum(void);
 
+    // Returns the latest boolean value if whether eor not to get latest instruction data. 
+    bool latest_return_message(void);
+
+    // Returns the size of the message
+    int32_t return_message_size(void);
+
     // Returns the latest General instruction data. 
     GeneralInstructions_MainInstrEnum get_latest_general_instructions(void);
-    
+
     // Test code for making sure that the protobuffers are
     // packing and unpacking properly
     bool testing_message_protobuffers(void);
@@ -41,9 +47,6 @@ private:
     // Handler for processing LED strip information
     void processing_led_strip_information(void);
     
-    // Keeping track of the build in led state. 
-    bool builtin_led_state = false; 
-
     // latest message data
     MessageData latest_message_data; 
 

@@ -25,6 +25,7 @@ typedef enum _MessageData_MessageType {
 typedef struct _MessageData {
     uint32_t message_size;
     MessageData_MessageType message_type;
+    bool return_message;
 } MessageData;
 
 
@@ -35,17 +36,19 @@ typedef struct _MessageData {
 
 
 /* Initializer values for message structs */
-#define MessageData_init_default                 {0, _MessageData_MessageType_MIN}
-#define MessageData_init_zero                    {0, _MessageData_MessageType_MIN}
+#define MessageData_init_default                 {0, _MessageData_MessageType_MIN, 0}
+#define MessageData_init_zero                    {0, _MessageData_MessageType_MIN, 0}
 
 /* Field tags (for use in manual encoding/decoding) */
 #define MessageData_message_size_tag             1
 #define MessageData_message_type_tag             2
+#define MessageData_return_message_tag           3
 
 /* Struct field encoding specification for nanopb */
 #define MessageData_FIELDLIST(X, a) \
 X(a, STATIC,   SINGULAR, UINT32,   message_size,      1) \
-X(a, STATIC,   SINGULAR, UENUM,    message_type,      2)
+X(a, STATIC,   SINGULAR, UENUM,    message_type,      2) \
+X(a, STATIC,   SINGULAR, BOOL,     return_message,    3)
 #define MessageData_CALLBACK NULL
 #define MessageData_DEFAULT NULL
 
@@ -55,7 +58,7 @@ extern const pb_msgdesc_t MessageData_msg;
 #define MessageData_fields &MessageData_msg
 
 /* Maximum encoded size of messages (where known) */
-#define MessageData_size                         8
+#define MessageData_size                         10
 
 #ifdef __cplusplus
 } /* extern "C" */
