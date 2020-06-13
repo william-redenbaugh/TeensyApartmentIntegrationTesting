@@ -1,5 +1,7 @@
 #include "status_led_thread.hpp"
 
+MUTEX_DECL(status_led_mutex);
+
 // Status LED object
 StatusLED status_led;
 
@@ -23,7 +25,9 @@ extern void start_status_led_thread(void);
 */
 /**************************************************************************/
 extern void status_signal_once(status_led_col colour){
+  chMtxLock(&status_led_mutex);
   flash_col = colour;
+  chMtxUnlock(&status_led_mutex);
   chEvtSignal(status_thread, EVENT_MASK(0));
 }
 
@@ -80,15 +84,21 @@ static THD_FUNCTION(status_led_thread, arg){
   while(1){
     // Choose fade events. 
     m = chEvtWaitAnyTimeout(ALL_EVENTS, 1000);
-    if(m & EVENT_MASK(0))
+    if(m & EVENT_MASK(0)){
+      chMtxLock(&status_led_mutex);
       set_col(flash_col); 
+      chMtxUnlock(&status_led_mutex);
+    }
     else
       status_led.black();
     
     // Choose fade events. 
     m = chEvtWaitAnyTimeout(ALL_EVENTS, 1000);
-    if(m & EVENT_MASK(0))
+    if(m & EVENT_MASK(0)){
+      chMtxLock(&status_led_mutex);
       set_col(flash_col);
+      chMtxUnlock(&status_led_mutex);
+    }
     else
       set_col(current_blink_col);
   }
