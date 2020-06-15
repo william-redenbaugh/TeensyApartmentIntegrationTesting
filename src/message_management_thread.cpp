@@ -71,6 +71,7 @@ void run_general_instructions(void){
     break;
 
     case(GeneralInstructions_MainInstrEnum_FLASH_LED):
+    status_change_flash(RGB_COL_WHITE);
     break;
 
     case(GeneralInstructions_MainInstrEnum_FLASH_GREEN):

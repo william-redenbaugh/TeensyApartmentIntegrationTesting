@@ -79,14 +79,14 @@ static THD_FUNCTION(status_led_thread, arg){
   eventmask_t m;
   while(1){
     // Choose fade events. 
-    m = chEvtWaitAnyTimeout(ALL_EVENTS, 1000);
+    m = chEvtWaitAnyTimeout(ALL_EVENTS, 10000);
     if(m & EVENT_MASK(0))
       set_col(flash_col); 
     else
       status_led.black();
     
     // Choose fade events. 
-    m = chEvtWaitAnyTimeout(ALL_EVENTS, 1000);
+    m = chEvtWaitAnyTimeout(ALL_EVENTS, 10000);
     if(m & EVENT_MASK(0))
       set_col(flash_col);
     else
