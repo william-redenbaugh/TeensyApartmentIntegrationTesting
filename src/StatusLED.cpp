@@ -48,7 +48,7 @@ void StatusLED::set_led(uint8_t r, uint8_t g, uint8_t b){
 */
 /**************************************************************************/
 void StatusLED::update(void){
-    SPI.transfer(this->dma_out_arr, this->dma_rec, sizeof(dma_out_arr), this->event_responder);
+    SPI.transfer(this->dma_out_arr, NULL, sizeof(dma_out_arr), this->event_responder);
 }
 
 /**************************************************************************/

@@ -33,7 +33,6 @@ class StatusLED{
         
     private: 
         uint8_t dma_out_arr[20];
-        uint8_t dma_rec[20];
         EventResponder event_responder; 
         thread_t *status_thread; 
 };
